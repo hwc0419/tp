@@ -1,22 +1,30 @@
 package seedu.duke;
 
+import jdk.jshell.spi.ExecutionControl;
+
+import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SyntaxAnalyser {
     //check if argument token is an integer ranging from 0 to 2
-    private static final String VALID_INDEX_REGEX = "^[0-2]$";
+    private static final String INT_0TO2 = "^[0-2]$";
+    private static final String INT_0TO999 = "^[0-9]{1,3}$";
     //check if argument token is any keyboard character
-    private static final String UNRESTRICTED_CHAR_LENGTH_REGEX = ".+";
+    private static final String CHAR_1TO100 = "^.{1,100}$";
+    //check if argument token contains one character from the set {B,M,E}
+    private static final String CHAR_B_M_E = "^[BME]$";
     private static final String[][] lutRegexSeq = {
             {},
-            {VALID_INDEX_REGEX},
-            {}
+            {INT_0TO2},
+            {},
+            {CHAR_1TO100},
+            {CHAR_1TO100},
             //insert new command syntax here
     };
 
     /**
-     * Returns the argument count for a given command
+     * Returns the expected argument count for a given command
      *
      * @param commandName the command name of given command
      * @return The number of arguments for the command
@@ -57,13 +65,34 @@ public class SyntaxAnalyser {
      * @param argumentTokens the list of arguments parsed from user input
      * @return True if all argument types are correct
      */
-    public static boolean validateTokens(String commandName, String[] argumentTokens) {
+    public static boolean validateCommandTokens(String commandName, String[] argumentTokens) {
         String[] cmdNameRegexSeq = getRegexSeq(commandName);
         for (int i = 0; i < getArgumentCount(commandName); i++) {
             Pattern pattern = Pattern.compile(cmdNameRegexSeq[i]);
             Matcher matcher = pattern.matcher(argumentTokens[i]);
             if (!matcher.find()) {
                 Formatter.printErrorWrongArgumentType(commandName, cmdNameRegexSeq[i], i);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //
+    /**
+     * Returns true if argument type of all arguments are correct, false otherwise
+     *
+     * @param argumentTokens the list of arguments parsed from user input
+     * @return True if all argument types are correct
+     */
+    public static boolean validateCacheTokens(String[] argumentTokens) {
+        //                          username     level       power     skill     exp
+        String[] cmdNameRegexSeq = {CHAR_1TO100, CHAR_B_M_E, INT_0TO2, INT_0TO2, INT_0TO999};
+        for (int i = 0; i < 5; i++) {
+            Pattern pattern = Pattern.compile(cmdNameRegexSeq[i]);
+            Matcher matcher = pattern.matcher(argumentTokens[i]);
+            if (!matcher.find()) {
+                Formatter.printErrorWrongArgumentType(cmdNameRegexSeq[i], i);
                 return false;
             }
         }

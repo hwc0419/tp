@@ -32,6 +32,11 @@ public class Formatter {
         System.out.println("\t Welcome to NUSFC 24 ");
         printWrapper("-");
     }
+    public static void printWelcomeUser(String selectedUser) {
+        printWrapper("-");
+        System.out.println("\t Welcome " + selectedUser);
+        printWrapper("-");
+    }
 
     /**
      * Prints goodbye message when program terminates
@@ -159,6 +164,32 @@ public class Formatter {
         }
         System.out.printf("\t SyntaxAnalyser: %s expects the %d%s argument to be %s\n",
                 commandName, userRanking, rankingSuffix, regex);
+    }
+
+    public static void printUserNotFound(String userName) {
+        System.out.println(userName + " not found. " +
+                "Create a new user with command \"new USER_NAME\"," +
+                "or load existing user state with command \"load USER_NAME\"");
+    }
+    public static void printErrorWrongArgumentType(String regex, int argumentPosition) {
+        int userRanking = argumentPosition + 1;
+        String rankingSuffix;
+        switch (userRanking) {
+        case 1:
+            rankingSuffix = "st";
+            break;
+        case 2:
+            rankingSuffix = "nd";
+            break;
+        case 3:
+            rankingSuffix = "rd";
+            break;
+        default:
+            rankingSuffix = "th";
+            break;
+        }
+        System.out.printf("\t SyntaxAnalyser: The %d%s argument should be %s\n",
+                userRanking, rankingSuffix, regex);
     }
 
     /**

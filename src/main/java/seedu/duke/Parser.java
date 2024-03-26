@@ -33,7 +33,7 @@ public class Parser {
 
             if (!isCorrectUserArgumentCount()) {
                 throw new ArgumentMismatchException(commandName, argumentTokens.length);
-            } else if (!SyntaxAnalyser.validateTokens(commandName, argumentTokens)) {
+            } else if (!SyntaxAnalyser.validateCommandTokens(commandName, argumentTokens)) {
                 throw new BadTokenException();
             }
         } else if (!isCorrectUserArgumentCount()) {

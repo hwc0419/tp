@@ -1,9 +1,6 @@
 package seedu.duke.ui;
 
-import seedu.duke.CommandList;
-import seedu.duke.Formatter;
-import seedu.duke.Parser;
-import seedu.duke.SyntaxAnalyser;
+import seedu.duke.*;
 
 import seedu.duke.exception.ProcessInputException;
 import seedu.duke.exception.ArgumentMismatchException;
@@ -20,8 +17,9 @@ public class Ui {
     private static boolean isRunning = true;
     private static String userInput;
     private static Parser userCommandReader;
-
+    public static Player currentPlayer = null;
     private static final Logger logger = Logger.getLogger("Foo");
+
 
     /**
      * Reads user input and stores it
@@ -70,11 +68,23 @@ public class Ui {
             CommandList.executeBye();
             break;
         case SHOOT:
-            CommandList.executeShoot(readArgumentTokens);
-            roundCount++;
+            if (currentPlayer != null) {
+                CommandList.executeShoot(readArgumentTokens);
+                Cache.updateCache();
+                roundCount++;
+            } else {
+                Formatter.printUserNotFound("Guest user name");
+            }
             break;
         case PENALTY:
             CommandList.executePenalty();
+            break;
+        case LOAD:
+            CommandList.executeLoad(readArgumentTokens);
+            break;
+        case NEW:
+            CommandList.executeNew(readArgumentTokens);
+            Cache.updateCache();
             break;
             //insert new executable command here
         default:

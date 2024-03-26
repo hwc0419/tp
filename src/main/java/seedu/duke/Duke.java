@@ -3,6 +3,8 @@ package seedu.duke;
 import seedu.duke.exception.ProcessInputException;
 import seedu.duke.ui.Ui;
 
+import java.io.FileNotFoundException;
+
 public class Duke {
 
     public Duke() {
@@ -14,8 +16,17 @@ public class Duke {
     public static void main(String[] args) {
         Formatter.printWelcomeMsg();
 
+        try {
+            Cache.loadPlayers();
+        } catch (FileNotFoundException e) {
+            Cache.spawnCacheFile();
+        }
+
+        if (Ui.currentPlayer == null) {
+            Formatter.printUserNotFound("Guest user name");
+        }
+
         while (Ui.getIsRunning()) {
-            Formatter.printGoalBeforeShot(Ui.roundCount);
             try {
                 Ui.beginListening();
                 Ui.processInput();
