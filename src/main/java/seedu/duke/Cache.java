@@ -49,23 +49,13 @@ public class Cache {
             lineNum++;
 
             if (SyntaxAnalyser.validateCacheTokens(tokens)) {
-                String userName = tokens[0];
-                int exp = Integer.parseInt(tokens[4]);
+                String name = tokens[1];
+                String difficulty = tokens[2];
+                int power = Integer.parseInt(tokens[3]);
+                int skill = Integer.parseInt(tokens[4]);
+                int exp = Integer.parseInt(tokens[5]);
 
-                switch (tokens[1]) {
-                case "B":
-                    players.add(new BeginnerSkill(userName, exp));
-                    break;
-                case "M":
-                    players.add(new MediumSkill(userName, exp));
-                    break;
-                case "E":
-                    players.add(new ExpertSkill(userName, exp));
-                    break;
-                default:
-                    Formatter.printErrorUnknown();
-                    break;
-                }
+                players.add(new Player(name, difficulty, power, skill, exp));
             } else {
                 Formatter.printFileCorruptionError(lineNum);
                 return;
@@ -81,7 +71,7 @@ public class Cache {
             FileWriter fw = new FileWriter(CACHE_FILE_PATH);
             String cacheFormattedString;
             for (Player shooter : players) {
-                //to overwrite toString method in Player class
+
                 cacheFormattedString = shooter.toString("cache");
                 fw.write(Formatter.appendNewLine(cacheFormattedString));
             }

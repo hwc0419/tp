@@ -28,26 +28,10 @@ public enum CommandList {
         return userInput != aiInput;
     }
 
-    public static void executeShoot(String[] readArgumentTokens) {
+    public static boolean executeShoot(String[] readArgumentTokens) {
         String selectedDirection = readArgumentTokens[0];
         int selectedDirectionIndex = Integer.parseInt(selectedDirection);
-        boolean isScoreGoal = goalCheck(Ai.getAiDirection(), selectedDirectionIndex);
-
-        Formatter.printGoalAfterShot(isScoreGoal);
-        if (isScoreGoal) {
-            Ui.currentPlayer.setExpGain(1);
-            System.out.println("You gained one experience point. Current exp: " + Ui.currentPlayer.getExp());
-            if (Ui.currentPlayer.getExp() == 20) {
-                System.out.println("Congrats, you leveled up to Medium");
-                Ui.currentPlayer = new MediumSkill(Ui.currentPlayer.name);
-                Cache.players.set(0, Ui.currentPlayer);
-            } else if (Ui.currentPlayer.getExp() == 50) {
-                System.out.println("Congrats, you leveled up to Expert");
-                Ui.currentPlayer = new ExpertSkill(Ui.currentPlayer.name);
-                Cache.players.set(0, Ui.currentPlayer);
-            }
-        }
-
+        return goalCheck(Ai.getAiDirection(), selectedDirectionIndex);
     }
 
     public static void executePenalty() {
@@ -60,15 +44,18 @@ public enum CommandList {
             if (Cache.players.get(i).name.equals(selectedUser)) {
                 Ui.currentPlayer = Cache.players.get(i);
                 Formatter.printWelcomeUser(selectedUser);
+                System.out.println("Current Difficulty: " + Ui.currentPlayer.difficulty);
+                Ui.roundCount = Ui.currentPlayer.getExp() + 1;
                 Formatter.printGoalBeforeShot(Ui.roundCount);
                 return;
             }
         }
+        System.out.println("Load error, user " + "\"" + selectedUser + "\"" + " not found");
     }
 
     public static void executeNew(String[] readArgumentTokens) {
         String newUserName = readArgumentTokens[0];
-        BeginnerSkill newUser = new BeginnerSkill(newUserName);
+        Player newUser = new Player(newUserName, "Beginner", 1, 1, 0);
         Cache.players.add(newUser);
     }
     //insert new command here

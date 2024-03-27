@@ -86,9 +86,9 @@ public class SyntaxAnalyser {
      * @return True if all argument types are correct
      */
     public static boolean validateCacheTokens(String[] argumentTokens) {
-        //                          username     level       power     skill     exp
-        String[] cmdNameRegexSeq = {CHAR_1TO100, CHAR_B_M_E, INT_0TO2, INT_0TO2, INT_0TO999};
-        for (int i = 0; i < 5; i++) {
+        //                          id          username     level        power     skill     exp
+        String[] cmdNameRegexSeq = {INT_0TO999, CHAR_1TO100, CHAR_1TO100, INT_0TO2, INT_0TO2, INT_0TO999};
+        for (int i = 0; i < 6; i++) {
             Pattern pattern = Pattern.compile(cmdNameRegexSeq[i]);
             Matcher matcher = pattern.matcher(argumentTokens[i]);
             if (!matcher.find()) {

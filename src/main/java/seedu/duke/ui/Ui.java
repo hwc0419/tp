@@ -69,9 +69,26 @@ public class Ui {
             break;
         case SHOOT:
             if (currentPlayer != null) {
-                CommandList.executeShoot(readArgumentTokens);
+                boolean isScoreGoal = CommandList.executeShoot(readArgumentTokens);
+                Formatter.printGoalAfterShot(isScoreGoal);
+                if (isScoreGoal) {
+                    Ui.currentPlayer.setExpGain(1);
+                    System.out.println("You gained one experience point. Current exp: " + Ui.currentPlayer.getExp());
+                    if (Ui.currentPlayer.getExp() == 20) {
+                        System.out.println("Congrats, you leveled up to Medium");
+                        Ui.currentPlayer.setDifficulty("Medium");
+                        Ui.currentPlayer.setSkill(2);
+                        Ui.currentPlayer.setExp(0);
+                    } else if (Ui.currentPlayer.getExp() == 50) {
+                        System.out.println("Congrats, you leveled up to Expert");
+                        Ui.currentPlayer.setDifficulty("Expert");
+                        Ui.currentPlayer.setSkill(3);
+                        Ui.currentPlayer.setExp(0);
+                    }
+                }
                 Cache.updateCache();
-                roundCount++;
+                roundCount = Ui.currentPlayer.getExp() + 1;
+                Formatter.printGoalBeforeShot(Ui.roundCount);
             } else {
                 Formatter.printUserNotFound("Guest user name");
             }
