@@ -1,9 +1,6 @@
 package seedu.duke.ui;
 
-import seedu.duke.Parser;
-import seedu.duke.Formatter;
-import seedu.duke.CommandList;
-import seedu.duke.SyntaxAnalyser;
+import seedu.duke.*;
 import seedu.duke.stats.MatchStat;
 import seedu.duke.exception.ProcessInputException;
 import seedu.duke.exception.ArgumentMismatchException;
@@ -65,10 +62,10 @@ public class Ui {
         CommandList selectedCommand = CommandList.valueOf(readUserCommand);
         switch (selectedCommand) {
         case BYE:
-            CommandList.executeBye();
+            CommandExecutor.executeBye();
             break;
         case SHOOT:
-            CommandList.executeShoot(readArgumentTokens);
+            CommandExecutor.executeShoot(readArgumentTokens);
             break;
         case YES:
             if (MatchStat.getIsMatchEnd()) {
@@ -79,13 +76,13 @@ public class Ui {
             break;
         case NO:
             if (MatchStat.getIsMatchEnd()) {
-                CommandList.executeBye();
+                CommandExecutor.executeBye();
             } else {
                 Formatter.printErrorUnknown();
             }
             break;
         case UPGRADE:
-            CommandList.executeUpgrade(readArgumentTokens);
+            CommandExecutor.executeUpgrade(readArgumentTokens);
             break;
             //insert new executable command here
         default:
